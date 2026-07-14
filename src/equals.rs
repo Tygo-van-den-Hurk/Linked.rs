@@ -1,8 +1,11 @@
-use crate::list::LinkedList;
-use crate::list::LinkedListNode;
+//! This module implements functions to check equality between two linked
+//! lists using the `core::cmp::Eq` and `core::cmp::PartialEq` traits.
 
-impl<T: Eq> core::cmp::Eq for LinkedListNode<T> {}
-impl<T: PartialEq> core::cmp::PartialEq for LinkedListNode<T> {
+use crate::list::LinkedList;
+use crate::node::Node;
+
+impl<T: Eq> core::cmp::Eq for Node<T> {}
+impl<T: PartialEq> core::cmp::PartialEq for Node<T> {
     fn eq(&self, other: &Self) -> bool {
         self.value == other.value
     }
