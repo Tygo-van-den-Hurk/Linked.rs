@@ -3,6 +3,7 @@ mkShell {
   buildInputs = [
     rust-analyzer
     rustfmt
+    clippy
     rustc
     cargo
   ];
