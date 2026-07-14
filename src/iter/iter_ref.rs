@@ -6,7 +6,6 @@ pub struct Iter<'a, T> {
 }
 
 impl<T> LinkedList<T> {
-
     /// Creates an iterator over immutable references in the list.
     pub fn iter(&self) -> Iter<'_, T> {
         Iter {

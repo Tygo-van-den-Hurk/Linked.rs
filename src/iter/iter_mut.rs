@@ -9,7 +9,6 @@ pub struct IterMut<'a, T> {
 }
 
 impl<T> LinkedList<T> {
-    
     /// Creates an iterator over mutable references in the list.
     pub fn iter_mut(&mut self) -> IterMut<'_, T> {
         IterMut {
