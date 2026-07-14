@@ -8,7 +8,7 @@ pub(crate) struct LinkedListNode<T> {
 }
 
 /// My implementation of a `LinkedList` in Rust.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct LinkedList<T> {
     /// The head of the list, is `None` iff the list is empty.
     pub(crate) head: Option<Box<LinkedListNode<T>>>,
@@ -33,6 +33,28 @@ impl<T> LinkedList<T> {
     /// Whether or not there are any values stored in the list.
     pub fn is_empty(&self) -> bool {
         self.length == 0
+    }
+
+    /// Clears the list of any and all elements within.
+    pub fn clear(&mut self) {
+        self.head = None;
+        self.length = 0;
+    }
+
+    /// Allows you to get a non-mutable borrow to the front element.
+    pub fn front(&self) -> Option<&T> {
+        match &self.head {
+            None => None,
+            Some(node) => Some(&node.value),
+        }
+    }
+
+    /// Allows you to get a mutable borrow to the front element.
+    pub fn front_mut(&mut self) -> Option<&mut T> {
+        match &mut self.head {
+            None => None,
+            Some(node) => Some(&mut node.value),
+        }
     }
 
     /// Pops the front most node from the list and returns its value.
@@ -63,19 +85,67 @@ mod test_linked_list {
     #[test]
     fn test_new() {
         let list: LinkedList<usize> = LinkedList::new();
-        assert!(list.len() == 0, "new list is not empty");
+        assert_eq!(list.len(), 0, "new list is not empty");
     }
 
     #[test]
     fn test_len() {
         let mut list = LinkedList::new();
-        assert!(list.len() == 0, "new list is not empty");
-        assert!(list.is_empty());
-
+        assert_eq!(list.len(), 0, "new list is not empty");
         for index in 0..100 {
             list.push_front(index);
-            assert_eq!(list.len(), index + 1);
+            assert_eq!(
+                list.len(),
+                index + 1,
+                "List length does not increase correctly"
+            );
         }
+    }
+
+    #[test]
+    fn test_is_empty() {
+        let mut list = LinkedList::new();
+        assert!(list.is_empty());
+        for index in 0..10 {
+            list.push_front(index);
+            assert!(!list.is_empty());
+        }
+    }
+
+    #[test]
+    fn test_clear() {
+        let mut list = LinkedList::new();
+        list.push_front(1);
+        list.clear();
+        assert!(list.is_empty());
+    }
+
+    #[test]
+    fn test_front() {
+        let mut list = LinkedList::new();
+        assert_eq!(list.front(), None);
+        list.push_front(1);
+        assert_eq!(list.front(), Some(&1));
+        list.push_front(2);
+        assert_eq!(list.front(), Some(&2));
+        list.pop_front();
+        assert_eq!(list.front(), Some(&1));
+        list.pop_front();
+        assert_eq!(list.front(), None);
+    }
+
+    #[test]
+    fn test_front_mut() {
+        let mut list = LinkedList::new();
+        assert_eq!(list.front_mut(), None);
+        list.push_front(1);
+        assert_eq!(list.front_mut(), Some(&mut 1));
+        list.push_front(2);
+        assert_eq!(list.front_mut(), Some(&mut 2));
+        list.pop_front();
+        assert_eq!(list.front_mut(), Some(&mut 1));
+        list.pop_front();
+        assert_eq!(list.front_mut(), None);
     }
 
     #[test]
@@ -94,7 +164,8 @@ mod test_linked_list {
         assert!(list.len() == 0, "list does not shrink");
         assert!(list.pop_front() == None);
         assert!(list.is_empty());
-        assert!(popped == pushed,
+        assert!(
+            popped == pushed,
             "what came out is not the same as what went in"
         );
     }
