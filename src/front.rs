@@ -27,7 +27,7 @@ impl<T> LinkedList<T> {
         }
 
         // Initialize tail if the list was empty before
-        if self.tail == None {
+        if self.tail.is_none() {
             self.tail = Some(pointer);
         }
 
