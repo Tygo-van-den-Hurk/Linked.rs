@@ -34,7 +34,7 @@ impl<T> LinkedList<T> {
         }
     }
 
-    // Grabs the node at the right end of the list.
+    /// Grabs the node at the right end of the list.
     pub fn pop_back(&mut self) -> Option<T> {
         if self.is_empty() {
             return None;
